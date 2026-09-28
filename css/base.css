@@ -1,0 +1,33 @@
+/* ============================================================
+   BASE — reset & tipografía
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  font-family:var(--font-sans);
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-size:var(--fs-md);
+  line-height:1.45;
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background var(--transition-base), color var(--transition-base);
+}
+h1,h2,h3,h4{font-weight:700;letter-spacing:-0.01em}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+select,input{font-family:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+::selection{background:var(--brand-blue-100);color:var(--brand-blue-900)}
+
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:var(--radius-full)}
+::-webkit-scrollbar-thumb:hover{background:var(--gray-400)}
+
+:focus-visible{outline:2px solid var(--brand-blue-600);outline-offset:2px;border-radius:6px}
+
+.visually-hidden{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;
+}
