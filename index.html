@@ -1,421 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Control de Asistencia — LeoTecnicas</title>
+<meta name="theme-color" content="#1f6fe0">
+<link rel="icon" href="assets/logo.png">
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
-:root{
-  --azul:#1a3a6b;--azul2:#0f5fa5;--verde:#5cb85c;--verde2:#4a9a4a;--verde-claro:#b6dc5a;
-  --gris-bg:#f0f4fa;--gris-card:#e8eef8;--blanco:#fff;--texto:#1a2a3a;--texto2:#4a5568;
-  --naranja:#ef9f27;--rojo:#e24b4a;--celeste:#2196f3;
-}
-body{background:transparent;color:var(--texto);font-size:12px}
-.db{border:1px solid #1a3a6b;border-radius:8px;overflow:hidden;background:var(--gris-bg)}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-/* HEADER */
-.hdr{background:var(--azul);padding:10px 16px;display:flex;align-items:center;gap:12px}
-.hdr-logo{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
-.hdr-logo img{width:44px;height:44px;object-fit:contain}
-.hdr-title{flex:1}
-.hdr-title h1{color:#fff;font-size:20px;font-weight:700;letter-spacing:.5px;line-height:1.1}
-.hdr-title p{color:#b6dc5a;font-size:11px;margin-top:2px}
-.hdr-fecha{text-align:right;color:#aaccee;font-size:10px;line-height:1.6}
-.hdr-fecha strong{color:#fff;font-size:11px}
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
 
-/* METRICS ROW */
-.metrics-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;padding:10px 10px 0}
-.m-card{background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #d0ddf0;display:flex;align-items:center;gap:10px}
-.m-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
-.m-icon.azul{background:#e6f1fb;color:#0f5fa5}
-.m-icon.verde{background:#eaf3de;color:#3b6d11}
-.m-icon.naranja{background:#faeeda;color:#854f0b}
-.m-icon.rojo{background:#fcebeb;color:#a32d2d}
-.m-info .val{font-size:22px;font-weight:700;color:var(--azul);line-height:1}
-.m-info .lbl{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
-.m-info .sub{font-size:10px;margin-top:2px}
-.m-info .sub.down{color:#e24b4a}
-.m-info .sub.verde{color:#3b6d11}
-.m-resumen{background:var(--azul);border-radius:8px;padding:10px 14px;color:#fff;min-width:155px}
-.m-resumen h4{font-size:11px;font-weight:700;letter-spacing:.3px;margin-bottom:6px;color:#b6dc5a;text-transform:uppercase}
-.m-res-row{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.1)}
-.m-res-row:last-child{border-bottom:none}
-.m-res-row span:last-child{font-weight:600;color:#fff}
-.m-res-row span:first-child{color:#aaccee}
-
-/* GRID 3 col */
-.section{padding:8px 10px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.card{background:#fff;border-radius:8px;border:1px solid #d0ddf0;padding:10px 12px;overflow:hidden}
-.card-title{font-size:11px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.4px;color:var(--azul);padding-bottom:7px;margin-bottom:8px;border-bottom:2px solid #e8eef8}
-
-/* BARS */
-.brow{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.bname{font-size:10px;color:#444;width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
-.btrack{flex:1;height:12px;background:#e8eef8;border-radius:3px;overflow:hidden}
-.bfill{height:100%;border-radius:3px;background:#378add;transition:width .4s}
-.bval{font-size:10px;font-weight:600;min-width:38px;color:#1a3a6b}
-
-/* DONUT LEGEND */
-.donut-wrap{display:flex;align-items:center;gap:12px}
-.donut-tbl{flex:1;font-size:10px}
-.donut-tbl tr td{padding:3px 4px}
-.donut-tbl tr td:first-child{color:#555}
-.donut-tbl tr td:nth-child(2){text-align:right;font-weight:600;color:#1a3a6b}
-.donut-tbl tr td:nth-child(3){text-align:right;color:#888}
-.donut-tbl tr.tot-row td{font-weight:700;border-top:1px solid #ddd;padding-top:5px}
-.dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle}
-
-/* HALF DONUT */
-.half-wrap{text-align:center}
-.half-wrap canvas{max-width:100%;height:120px!important}
-.half-label{font-size:11px;color:#555;margin-top:4px}
-.half-val{font-size:18px;font-weight:700;line-height:1}
-
-/* TABLE */
-.dtbl{width:100%;border-collapse:collapse;font-size:10px}
-.dtbl th{background:var(--azul);color:#fff;padding:5px 7px;text-align:left;white-space:nowrap;font-weight:600;font-size:10px}
-.dtbl td{padding:4px 7px;border-bottom:1px solid #eef3fa;white-space:nowrap}
-.dtbl tr:hover td{background:#f0f6ff}
-.dtbl tr.tot td{background:#e8eef8;font-weight:700;position:sticky;bottom:0}
-.tbl-wrap{overflow-x:auto;max-height:240px;overflow-y:auto}
-
-/* TREND */
-.trend-canvas-wrap{position:relative;width:100%;height:160px}
-
-/* FILTERS */
-.fbar{background:var(--verde-claro);padding:8px 10px;display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
-.fg{display:flex;flex-direction:column;gap:2px;flex:1;min-width:100px}
-.fg label{font-size:10px;font-weight:700;color:#2d4a00;text-transform:uppercase;letter-spacing:.3px}
-.fg select{border:1.5px solid #7aab1a;border-radius:16px;padding:4px 10px;font-size:11px;background:#fff;color:#2d4a00;font-weight:600;cursor:pointer}
-.btn-clear{background:#1a3a6b;color:#fff;border:none;border-radius:16px;padding:5px 14px;font-size:11px;font-weight:600;cursor:pointer;align-self:flex-end;white-space:nowrap}
-.btn-clear:hover{background:#0f5fa5}
-
-/* FOOTER */
-.footer{background:var(--azul);padding:6px 16px;display:flex;gap:20px;align-items:center}
-.footer span{color:#aaccee;font-size:10px}
-.footer strong{color:#b6dc5a}
-</style>
-
-<div class="db">
-
-<div class="hdr">
-  <div class="hdr-logo">
-    <img src="logo.png" alt="Logo empresa">
+<!-- ===================== SPLASH SCREEN ===================== -->
+<div id="splash">
+  <div class="splash-logo-wrap"><img src="assets/logo.png" alt="LeoTecnicas"></div>
+  <div class="splash-text">
+    <h1>Bienvenido(a)</h1>
+    <p>Sistema de Control de Asistencia</p>
+    <div class="splash-brand">LeoTecnicas</div>
   </div>
-  <div class="hdr-title">
-    <h1>REPORTE DE TIEMPO TARDÍO</h1>
-    <p>Análisis de retardos y puntualidad del personal</p>
-  </div>
-  <a href="detalle.html" style="margin-left:auto;background:#b6dc5a;color:#2d4a00;border-radius:20px;padding:6px 16px;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px">📅 Ver registros detallados</a>
-  <div class="hdr-fecha">
-    <i class="ti ti-calendar" aria-hidden="true" style="font-size:13px"></i> Última actualización<br>
-    <strong id="fechaHoy"></strong><br>
-    <span style="font-size:9px;color:#aaccee">Rango: 01/01/2026 – 09/06/2026</span>
+  <div class="splash-loader"><div class="splash-loader-fill"></div></div>
+  <div class="splash-caption">Cargando registros…</div>
+</div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div class="sidebar-brand-text"><strong>LeoTecnicas</strong><span>Asistencia</span></div>
+    </div>
+    <div id="sidebarNav"></div>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-foot">Sistema v2.0.0</div>
+  </nav>
+
+  <div class="main-col">
+    <header class="app-header" id="appHeader"></header>
+
+    <main>
+      <section class="view" id="view-dashboard"></section>
+      <section class="view" id="view-registros"></section>
+      <section class="view" id="view-marcas"></section>
+      <section class="view" id="view-semanal"></section>
+      <section class="view" id="view-calendario"></section>
+    </main>
   </div>
 </div>
 
-<div class="metrics-row" id="metricsRow">
-  <div class="m-card">
-    <div class="m-icon azul"><i class="ti ti-clock" aria-hidden="true"></i></div>
-    <div class="m-info">
-      <div class="lbl">Tiempo tardío total</div>
-      <div class="val" id="mTot">6.796</div>
-      <div class="sub" style="color:#888">minutos</div>
-    </div>
-  </div>
-  <div class="m-card">
-    <div class="m-icon verde"><i class="ti ti-users" aria-hidden="true"></i></div>
-    <div class="m-info">
-      <div class="lbl">Empleados con retardos</div>
-      <div class="val" id="mPers" style="color:#3b6d11">43</div>
-      <div class="sub verde" id="mPersPct">de 54 empleados</div>
-    </div>
-  </div>
-  <div class="m-card">
-    <div class="m-icon naranja"><i class="ti ti-gauge" aria-hidden="true"></i></div>
-    <div class="m-info">
-      <div class="lbl">Promedio por empleado</div>
-      <div class="val" id="mProm" style="color:#854f0b">126</div>
-      <div class="sub" style="color:#888">minutos</div>
-    </div>
-  </div>
-  <div class="m-card">
-    <div class="m-icon rojo"><i class="ti ti-award" aria-hidden="true"></i></div>
-    <div class="m-info">
-      <div class="lbl">Mayor tiempo tardío</div>
-      <div class="val" id="mMaxVal" style="color:#e24b4a;font-size:16px">1.631</div>
-      <div class="sub" style="color:#e24b4a;font-weight:600;font-size:10px" id="mMaxNom">Andrea Paola Acosta</div>
-    </div>
-  </div>
-  <div class="m-resumen">
-    <h4>Resumen general</h4>
-    <div class="m-res-row"><span>Total registros</span><span id="rTotReg">4.793</span></div>
-    <div class="m-res-row"><span>Departamentos</span><span>4</span></div>
-    <div class="m-res-row"><span>Personas</span><span id="rTotPers">54</span></div>
-    <div class="m-res-row"><span>Meses evaluados</span><span id="rMeses">6</span></div>
-  </div>
-</div>
+<!-- ===================== DATOS (sin modificar) ===================== -->
+<script src="data/dashboard-data.js"></script>
+<script src="data/data.js"></script>
+<script src="data/sin_marca.js"></script>
+<script src="data/calendar-data.js"></script>
 
-<div class="section">
-  <div class="grid3">
-    <div class="card">
-      <div class="card-title">Top 10 — tiempo tardío</div>
-      <div id="barChart"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Tiempo tardío por departamento</div>
-      <div class="donut-wrap">
-        <div style="position:relative;width:130px;flex-shrink:0">
-          <canvas id="donutChart" role="img" aria-label="Tardíos por departamento" style="width:130px!important;height:130px!important"></canvas>
-        </div>
-        <table class="donut-tbl">
-          <tbody id="donutLegend"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Retardo mañana vs tarde</div>
-      <div style="display:flex;gap:8px;justify-content:space-around;text-align:center;padding:6px 0">
-        <div>
-          <div style="font-size:9px;color:#666;margin-bottom:4px">Retardo Mañana</div>
-          <div id="mmVal" style="font-size:20px;font-weight:700;color:#0f5fa5">4.873</div>
-          <div id="mmPct" style="font-size:11px;color:#0f5fa5;font-weight:600">71,7%</div>
-        </div>
-        <div style="position:relative;width:110px;flex-shrink:0">
-          <canvas id="halfChart" role="img" aria-label="Retardo mañana vs tarde" style="width:110px!important;height:110px!important"></canvas>
-        </div>
-        <div>
-          <div style="font-size:9px;color:#666;margin-bottom:4px">Retardo Tarde</div>
-          <div id="mtVal" style="font-size:20px;font-weight:700;color:#5cb85c">1.923</div>
-          <div id="mtPct" style="font-size:11px;color:#5cb85c;font-weight:600">28,3%</div>
-        </div>
-      </div>
-      <div style="font-size:10px;color:#888;text-align:center;margin-top:6px" id="halfNote">Los retardos en la mañana representan el 71,7% del total</div>
-    </div>
-  </div>
-</div>
-
-<div class="section" style="padding-top:0">
-  <div class="grid2">
-    <div class="card">
-      <div class="card-title">Tendencia mensual de tiempo tardío</div>
-      <div class="trend-canvas-wrap"><canvas id="trendChart" role="img" aria-label="Tendencia mensual"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Días de la semana con más retardos</div>
-      <div style="position:relative;width:100%;height:160px"><canvas id="weekChart" role="img" aria-label="Tardíos por día de semana"></canvas></div>
-    </div>
-  </div>
-</div>
-
-<div class="section" style="padding-top:0">
-  <div class="card">
-    <div class="card-title">Resumen detallado por empleado</div>
-    <div class="tbl-wrap">
-      <table class="dtbl">
-        <thead><tr>
-          <th>Empleado</th><th>Departamento</th><th>Ret. Mañana (min)</th>
-          <th>Ret. Tarde (min)</th><th>Total (min)</th><th>Retardos</th>
-        </tr></thead>
-        <tbody id="detTbody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<div class="fbar">
-  <div class="fg"><label>Año</label>
-    <select id="fAnio"><option value="">Todos</option><option value="2026" selected>2026</option></select>
-  </div>
-  <div class="fg"><label>Mes</label>
-    <select id="fMes"><option value="">Todos</option>
-      <option>Enero</option><option>Febrero</option><option>Marzo</option>
-      <option>Abril</option><option>Mayo</option><option>Junio</option>
-    </select>
-  </div>
-  <div class="fg"><label>Departamento</label>
-    <select id="fDept"><option value="">Todos</option>
-      <option>Administración</option><option>Campo</option>
-      <option>Taller</option><option>Transformadores</option>
-    </select>
-  </div>
-  <div class="fg"><label>Empleado</label><select id="fPers"><option value="">Todos</option></select></div>
-  <button class="btn-clear" onclick="clearFilters()"><i class="ti ti-refresh" aria-hidden="true"></i> Limpiar filtros</button>
-</div>
-
-<div class="footer">
-  <span><i class="ti ti-info-circle" aria-hidden="true"></i> Los datos provienen de <strong>BaseDatosPowerBI.xlsx</strong></span>
-  <span style="margin-left:auto">Fuente: <strong>Sistema de Control de Asistencia</strong></span>
-</div>
-
-</div>
-
+<!-- ===================== LIBRERÍAS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-const RAW=[{"n":"Oswaldo Sierra","d":"Taller","mes":"Enero","anio":"2026","mm":41.0,"mt":0.0,"tt":41.0,"rm":1,"rt":0,"cnt":14},{"n":"Oswaldo Sierra","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":1.0,"tt":1.0,"rm":0,"rt":1,"cnt":25},{"n":"Moises nan","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":21},{"n":"Moises nan","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Osman nan","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Osman nan","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Jeyson Alberto Sierra Pimienta nan","d":"Taller","mes":"Enero","anio":"2026","mm":9.0,"mt":0.0,"tt":9.0,"rm":3,"rt":0,"cnt":21},{"n":"Jeyson Alberto Sierra Pimienta nan","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Julian Andres Londoño","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":15},{"n":"Julian Andres Londoño","d":"Taller","mes":"Febrero","anio":"2026","mm":4.0,"mt":61.0,"tt":65.0,"rm":1,"rt":3,"cnt":25},{"n":"Abner Fabian nan","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":11.0,"tt":11.0,"rm":0,"rt":1,"cnt":22},{"n":"Abner Fabian nan","d":"Taller","mes":"Febrero","anio":"2026","mm":38.0,"mt":0.0,"tt":38.0,"rm":2,"rt":0,"cnt":24},{"n":"Luis Eduardo Rueda","d":"Taller","mes":"Enero","anio":"2026","mm":12.0,"mt":5.0,"tt":17.0,"rm":1,"rt":1,"cnt":17},{"n":"Luis Eduardo Rueda","d":"Taller","mes":"Febrero","anio":"2026","mm":24.0,"mt":0.0,"tt":24.0,"rm":1,"rt":0,"cnt":24},{"n":"Francisco Javier Gomez","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":25},{"n":"Francisco Javier Gomez","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Robis José nan","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Robis José nan","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":20.0,"tt":20.0,"rm":0,"rt":1,"cnt":26},{"n":"Victor Hugo nan","d":"Taller","mes":"Enero","anio":"2026","mm":17.0,"mt":5.0,"tt":22.0,"rm":3,"rt":1,"cnt":23},{"n":"Victor Hugo nan","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":5.0,"tt":5.0,"rm":0,"rt":3,"cnt":26},{"n":"Luis Eduardo Romero","d":"Taller","mes":"Enero","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":21},{"n":"Luis Eduardo Romero","d":"Taller","mes":"Febrero","anio":"2026","mm":10.0,"mt":3.0,"tt":13.0,"rm":5,"rt":2,"cnt":26},{"n":"Alvaro Rueda","d":"Taller","mes":"Febrero","anio":"2026","mm":25.0,"mt":0.0,"tt":25.0,"rm":1,"rt":0,"cnt":26},{"n":"Alvaro Rueda","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":20},{"n":"Jesus Emilio Brand","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":16},{"n":"Jesus Emilio Brand","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":24},{"n":"Camilo Andrés Algarin","d":"Taller","mes":"Enero","anio":"2026","mm":75.0,"mt":67.0,"tt":142.0,"rm":5,"rt":4,"cnt":24},{"n":"Camilo Andrés Algarin","d":"Taller","mes":"Febrero","anio":"2026","mm":119.0,"mt":6.0,"tt":125.0,"rm":12,"rt":2,"cnt":25},{"n":"Yilian Marcela Perea","d":"Taller","mes":"Febrero","anio":"2026","mm":47.0,"mt":9.0,"tt":56.0,"rm":5,"rt":5,"cnt":24},{"n":"Yilian Marcela Perea","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Jhon Enrique Gualdron","d":"Taller","mes":"Enero","anio":"2026","mm":3.0,"mt":0.0,"tt":3.0,"rm":1,"rt":0,"cnt":17},{"n":"Jhon Enrique Gualdron","d":"Taller","mes":"Febrero","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":24},{"n":"Joaquin Hernando Teran","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":20.0,"tt":20.0,"rm":0,"rt":1,"cnt":15},{"n":"Joaquin Hernando Teran","d":"Taller","mes":"Febrero","anio":"2026","mm":12.0,"mt":60.0,"tt":72.0,"rm":6,"rt":2,"cnt":23},{"n":"Diego Alejandro Florez","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Diego Alejandro Florez","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":21},{"n":"Nestor J. Cisneros nan","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Nestor J. Cisneros nan","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Luis Orlando Cortez","d":"Transformadores","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":3},{"n":"Dayron Antonio Velez","d":"Transformadores","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Jhon Jairo Rodriguez","d":"Campo","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":15},{"n":"Jhon Jairo Rodriguez","d":"Campo","mes":"Febrero","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":22},{"n":"Alexander Rueda","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Alexander Rueda","d":"Taller","mes":"Febrero","anio":"2026","mm":12.0,"mt":5.0,"tt":17.0,"rm":3,"rt":1,"cnt":21},{"n":"Adrian Eduardo Sanchez","d":"Campo","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":10},{"n":"Adrian Eduardo Sanchez","d":"Campo","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Santos Giovanni Sanchez","d":"Campo","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Santos Giovanni Sanchez","d":"Campo","mes":"Febrero","anio":"2026","mm":42.0,"mt":4.0,"tt":46.0,"rm":6,"rt":2,"cnt":17},{"n":"Daniel Andrés Vargas","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":20.0,"tt":20.0,"rm":0,"rt":1,"cnt":13},{"n":"Daniel Andrés Vargas","d":"Taller","mes":"Febrero","anio":"2026","mm":19.0,"mt":1.0,"tt":20.0,"rm":9,"rt":1,"cnt":25},{"n":"Daniel Andrés Vargas","d":"Campo","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"María Camila Barreto","d":"Campo","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":20},{"n":"María Camila Barreto","d":"Campo","mes":"Febrero","anio":"2026","mm":4.0,"mt":1.0,"tt":5.0,"rm":4,"rt":1,"cnt":25},{"n":"Rosalia nan","d":"Administración","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":15},{"n":"Rosalia nan","d":"Administración","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Andrea Paola Acosta","d":"Administración","mes":"Enero","anio":"2026","mm":168.0,"mt":196.0,"tt":364.0,"rm":14,"rt":16,"cnt":22},{"n":"Andrea Paola Acosta","d":"Administración","mes":"Febrero","anio":"2026","mm":242.0,"mt":81.0,"tt":323.0,"rm":17,"rt":18,"cnt":25},{"n":"Claudia Patricia Rodriguez","d":"Administración","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Claudia Patricia Rodriguez","d":"Administración","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Leidy Carolina Meneses","d":"Administración","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":13},{"n":"JERSON Jimenez","d":"Transformadores","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Leidy Encizo","d":"Taller","mes":"Enero","anio":"2026","mm":10.0,"mt":0.0,"tt":10.0,"rm":4,"rt":0,"cnt":17},{"n":"Leidy Encizo","d":"Taller","mes":"Febrero","anio":"2026","mm":107.0,"mt":0.0,"tt":107.0,"rm":9,"rt":0,"cnt":26},{"n":"Jaime Garcia","d":"Taller","mes":"Enero","anio":"2026","mm":40.0,"mt":0.0,"tt":40.0,"rm":1,"rt":0,"cnt":14},{"n":"Jaime Garcia","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":25},{"n":"Gustavo Morales","d":"Campo","mes":"Enero","anio":"2026","mm":82.0,"mt":36.0,"tt":118.0,"rm":1,"rt":4,"cnt":14},{"n":"Dirceu Centeno","d":"Taller","mes":"Enero","anio":"2026","mm":126.0,"mt":0.0,"tt":126.0,"rm":2,"rt":0,"cnt":14},{"n":"Dirceu Centeno","d":"Taller","mes":"Febrero","anio":"2026","mm":2.0,"mt":0.0,"tt":2.0,"rm":1,"rt":0,"cnt":26},{"n":"WALTER VEGA","d":"Taller","mes":"Enero","anio":"2026","mm":15.0,"mt":0.0,"tt":15.0,"rm":1,"rt":0,"cnt":16},{"n":"WALTER VEGA","d":"Taller","mes":"Febrero","anio":"2026","mm":6.0,"mt":0.0,"tt":6.0,"rm":1,"rt":0,"cnt":27},{"n":"Duver Petro","d":"Campo","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":24},{"n":"Duver Petro","d":"Campo","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":12},{"n":"Enoc Florez","d":"Taller","mes":"Enero","anio":"2026","mm":3.0,"mt":22.0,"tt":25.0,"rm":2,"rt":6,"cnt":22},{"n":"Enoc Florez","d":"Taller","mes":"Febrero","anio":"2026","mm":122.0,"mt":71.0,"tt":193.0,"rm":6,"rt":16,"cnt":26},{"n":"Jorge Contreras","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Jorge Contreras","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":4.0,"tt":4.0,"rm":0,"rt":1,"cnt":26},{"n":"Brayan Pamplona","d":"Taller","mes":"Enero","anio":"2026","mm":0.0,"mt":2.0,"tt":2.0,"rm":0,"rt":1,"cnt":23},{"n":"Brayan Pamplona","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":25},{"n":"Jesus Osuna","d":"Taller","mes":"Enero","anio":"2026","mm":57.0,"mt":0.0,"tt":57.0,"rm":1,"rt":0,"cnt":14},{"n":"Jesus Osuna","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Heran Escobar","d":"Taller","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Heran Escobar","d":"Taller","mes":"Enero","anio":"2026","mm":69.0,"mt":0.0,"tt":69.0,"rm":1,"rt":0,"cnt":14},{"n":"Luis Rivero","d":"Taller","mes":"Enero","anio":"2026","mm":60.0,"mt":0.0,"tt":60.0,"rm":1,"rt":0,"cnt":14},{"n":"Luis Rivero","d":"Taller","mes":"Febrero","anio":"2026","mm":2.0,"mt":0.0,"tt":2.0,"rm":1,"rt":0,"cnt":26},{"n":"Gustavo Morales","d":"Campo","mes":"Febrero","anio":"2026","mm":20.0,"mt":8.0,"tt":28.0,"rm":2,"rt":3,"cnt":23},{"n":"Luis Orlando Cortez","d":"Transformadores","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":2},{"n":"Dayron Antonio Velez","d":"Transformadores","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Leidy Tatiana Galeth","d":"Administración","mes":"Febrero","anio":"2026","mm":6.0,"mt":0.0,"tt":6.0,"rm":2,"rt":0,"cnt":11},{"n":"Danna Machando","d":"Administración","mes":"Febrero","anio":"2026","mm":0.0,"mt":30.0,"tt":30.0,"rm":0,"rt":6,"cnt":11},{"n":"Nubia Guete","d":"Administración","mes":"Febrero","anio":"2026","mm":14.0,"mt":39.0,"tt":53.0,"rm":2,"rt":3,"cnt":7},{"n":"JERSON Jimenez","d":"Transformadores","mes":"Febrero","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Oswaldo Sierra","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Moises nan","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Osman nan","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Jeyson Alberto Sierra Pimienta nan","d":"Taller","mes":"Marzo","anio":"2026","mm":41.0,"mt":72.0,"tt":113.0,"rm":1,"rt":6,"cnt":22},{"n":"Julian Andres Londoño","d":"Taller","mes":"Marzo","anio":"2026","mm":45.0,"mt":0.0,"tt":45.0,"rm":1,"rt":0,"cnt":25},{"n":"Abner Fabian nan","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Luis Eduardo Rueda","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":24},{"n":"Francisco Javier Gomez","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":2.0,"tt":2.0,"rm":0,"rt":1,"cnt":23},{"n":"Robis José nan","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":25},{"n":"Victor Hugo nan","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":18.0,"tt":18.0,"rm":0,"rt":7,"cnt":26},{"n":"Luis Eduardo Romero","d":"Taller","mes":"Marzo","anio":"2026","mm":14.0,"mt":2.0,"tt":16.0,"rm":4,"rt":2,"cnt":25},{"n":"Alvaro Rueda","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Jesus Emilio Brand","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Camilo Andrés Algarin","d":"Taller","mes":"Marzo","anio":"2026","mm":189.0,"mt":1.0,"tt":190.0,"rm":21,"rt":1,"cnt":24},{"n":"Yilian Marcela Perea","d":"Taller","mes":"Marzo","anio":"2026","mm":86.0,"mt":6.0,"tt":92.0,"rm":4,"rt":2,"cnt":25},{"n":"Jhon Enrique Gualdron","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":24},{"n":"Joaquin Hernando Teran","d":"Taller","mes":"Marzo","anio":"2026","mm":61.0,"mt":7.0,"tt":68.0,"rm":11,"rt":2,"cnt":23},{"n":"Diego Alejandro Florez","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":21},{"n":"Nestor J. Cisneros nan","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":24},{"n":"Luis Orlando Cortez","d":"Transformadores","mes":"Marzo","anio":"2026","mm":5.0,"mt":5.0,"tt":10.0,"rm":3,"rt":2,"cnt":12},{"n":"Gabriel Alfredo Gomez","d":"Taller","mes":"Marzo","anio":"2026","mm":28.0,"mt":6.0,"tt":34.0,"rm":7,"rt":1,"cnt":25},{"n":"Jhon Jairo Rodriguez","d":"Campo","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":15},{"n":"Alexander Rueda","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Adrian Eduardo Sanchez","d":"Campo","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Santos Giovanni Sanchez","d":"Campo","mes":"Marzo","anio":"2026","mm":31.0,"mt":17.0,"tt":48.0,"rm":11,"rt":4,"cnt":22},{"n":"Daniel Andrés Vargas","d":"Taller","mes":"Marzo","anio":"2026","mm":25.0,"mt":2.0,"tt":27.0,"rm":12,"rt":1,"cnt":24},{"n":"María Camila Barreto","d":"Campo","mes":"Marzo","anio":"2026","mm":15.0,"mt":0.0,"tt":15.0,"rm":3,"rt":0,"cnt":25},{"n":"Rosalia nan","d":"Administración","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Andrea Paola Acosta","d":"Administración","mes":"Marzo","anio":"2026","mm":237.0,"mt":157.0,"tt":394.0,"rm":16,"rt":19,"cnt":26},{"n":"Claudia Patricia Rodriguez","d":"Administración","mes":"Marzo","anio":"2026","mm":2.0,"mt":0.0,"tt":2.0,"rm":1,"rt":0,"cnt":25},{"n":"Leidy Encizo","d":"Taller","mes":"Marzo","anio":"2026","mm":36.0,"mt":1.0,"tt":37.0,"rm":8,"rt":1,"cnt":26},{"n":"Jaime Garcia","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":25},{"n":"Gustavo Morales","d":"Campo","mes":"Marzo","anio":"2026","mm":0.0,"mt":1.0,"tt":1.0,"rm":0,"rt":1,"cnt":26},{"n":"Dirceu Centeno","d":"Taller","mes":"Marzo","anio":"2026","mm":38.0,"mt":0.0,"tt":38.0,"rm":4,"rt":0,"cnt":26},{"n":"WALTER VEGA","d":"Taller","mes":"Marzo","anio":"2026","mm":6.0,"mt":0.0,"tt":6.0,"rm":1,"rt":0,"cnt":26},{"n":"Duver Petro","d":"Campo","mes":"Marzo","anio":"2026","mm":8.0,"mt":0.0,"tt":8.0,"rm":1,"rt":0,"cnt":13},{"n":"Leidy Tatiana Galeth","d":"Administración","mes":"Marzo","anio":"2026","mm":47.0,"mt":4.0,"tt":51.0,"rm":5,"rt":2,"cnt":23},{"n":"Enoc Florez","d":"Taller","mes":"Marzo","anio":"2026","mm":95.0,"mt":36.0,"tt":131.0,"rm":6,"rt":18,"cnt":24},{"n":"Jorge Contreras","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":2.0,"tt":2.0,"rm":0,"rt":1,"cnt":25},{"n":"Danna Machando","d":"Administración","mes":"Marzo","anio":"2026","mm":5.0,"mt":118.0,"tt":123.0,"rm":3,"rt":19,"cnt":26},{"n":"Nubia Guete","d":"Administración","mes":"Marzo","anio":"2026","mm":0.0,"mt":20.0,"tt":20.0,"rm":0,"rt":7,"cnt":22},{"n":"Brayan Pamplona","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":25},{"n":"Jesus Osuna","d":"Taller","mes":"Marzo","anio":"2026","mm":37.0,"mt":0.0,"tt":37.0,"rm":2,"rt":0,"cnt":25},{"n":"Heran Escobar","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":27.0,"tt":27.0,"rm":0,"rt":1,"cnt":26},{"n":"Luis Rivero","d":"Taller","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":26},{"n":"Dayron Antonio Velez","d":"Transformadores","mes":"Marzo","anio":"2026","mm":3.0,"mt":0.0,"tt":3.0,"rm":1,"rt":0,"cnt":4},{"n":"JERSON Jimenez","d":"Transformadores","mes":"Marzo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Oswaldo Sierra","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Moises nan","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Osman nan","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Jeyson Alberto Sierra Pimienta nan","d":"Taller","mes":"Abril","anio":"2026","mm":21.0,"mt":71.0,"tt":92.0,"rm":3,"rt":2,"cnt":22},{"n":"Julian Andres Londoño","d":"Taller","mes":"Abril","anio":"2026","mm":23.0,"mt":0.0,"tt":23.0,"rm":1,"rt":0,"cnt":22},{"n":"Abner Fabian nan","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Luis Eduardo Rueda","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":1.0,"tt":1.0,"rm":0,"rt":1,"cnt":22},{"n":"Francisco Javier Gomez","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":21},{"n":"Robis José nan","d":"Taller","mes":"Abril","anio":"2026","mm":16.0,"mt":0.0,"tt":16.0,"rm":1,"rt":0,"cnt":23},{"n":"Victor Hugo nan","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":48.0,"tt":48.0,"rm":0,"rt":2,"cnt":24},{"n":"Luis Eduardo Romero","d":"Taller","mes":"Abril","anio":"2026","mm":8.0,"mt":0.0,"tt":8.0,"rm":2,"rt":0,"cnt":23},{"n":"Alvaro Rueda","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Jesus Emilio Brand","d":"Taller","mes":"Abril","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":18},{"n":"Camilo Andrés Algarin","d":"Taller","mes":"Abril","anio":"2026","mm":148.0,"mt":15.0,"tt":163.0,"rm":13,"rt":3,"cnt":22},{"n":"Yilian Marcela Perea","d":"Taller","mes":"Abril","anio":"2026","mm":5.0,"mt":3.0,"tt":8.0,"rm":3,"rt":1,"cnt":23},{"n":"Jhon Enrique Gualdron","d":"Taller","mes":"Abril","anio":"2026","mm":1.0,"mt":7.0,"tt":8.0,"rm":1,"rt":1,"cnt":21},{"n":"Joaquin Hernando Teran","d":"Taller","mes":"Abril","anio":"2026","mm":3.0,"mt":0.0,"tt":3.0,"rm":3,"rt":0,"cnt":20},{"n":"Diego Alejandro Florez","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":23},{"n":"Nestor J. Cisneros nan","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Gabriel Alfredo Gomez","d":"Taller","mes":"Abril","anio":"2026","mm":70.0,"mt":1.0,"tt":71.0,"rm":12,"rt":1,"cnt":22},{"n":"Jhon Jairo Rodriguez","d":"Campo","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":16},{"n":"Adrian Eduardo Sanchez","d":"Campo","mes":"Abril","anio":"2026","mm":2.0,"mt":0.0,"tt":2.0,"rm":1,"rt":0,"cnt":19},{"n":"Santos Giovanni Sanchez","d":"Campo","mes":"Abril","anio":"2026","mm":23.0,"mt":0.0,"tt":23.0,"rm":5,"rt":0,"cnt":19},{"n":"Diego Andrés De la espriella","d":"Campo","mes":"Abril","anio":"2026","mm":82.0,"mt":11.0,"tt":93.0,"rm":2,"rt":3,"cnt":20},{"n":"Daniel Andrés Vargas","d":"Taller","mes":"Abril","anio":"2026","mm":33.0,"mt":12.0,"tt":45.0,"rm":12,"rt":2,"cnt":22},{"n":"María Camila Barreto","d":"Campo","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":21},{"n":"Rosalia nan","d":"Administración","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":21},{"n":"Andrea Paola Acosta","d":"Administración","mes":"Abril","anio":"2026","mm":250.0,"mt":85.0,"tt":335.0,"rm":16,"rt":15,"cnt":22},{"n":"Claudia Patricia Rodriguez","d":"Administración","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Leidy Encizo","d":"Taller","mes":"Abril","anio":"2026","mm":45.0,"mt":0.0,"tt":45.0,"rm":6,"rt":0,"cnt":22},{"n":"Jaime Garcia","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":23},{"n":"Gustavo Morales","d":"Campo","mes":"Abril","anio":"2026","mm":0.0,"mt":7.0,"tt":7.0,"rm":0,"rt":3,"cnt":23},{"n":"Dirceu Centeno","d":"Taller","mes":"Abril","anio":"2026","mm":11.0,"mt":3.0,"tt":14.0,"rm":2,"rt":1,"cnt":21},{"n":"WALTER VEGA","d":"Taller","mes":"Abril","anio":"2026","mm":5.0,"mt":0.0,"tt":5.0,"rm":1,"rt":0,"cnt":22},{"n":"Duver Petro","d":"Campo","mes":"Abril","anio":"2026","mm":2.0,"mt":0.0,"tt":2.0,"rm":1,"rt":0,"cnt":18},{"n":"Leidy Tatiana Galeth","d":"Administración","mes":"Abril","anio":"2026","mm":4.0,"mt":5.0,"tt":9.0,"rm":1,"rt":2,"cnt":19},{"n":"Enoc Florez","d":"Taller","mes":"Abril","anio":"2026","mm":11.0,"mt":27.0,"tt":38.0,"rm":1,"rt":6,"cnt":22},{"n":"Jorge Contreras","d":"Taller","mes":"Abril","anio":"2026","mm":1.0,"mt":5.0,"tt":6.0,"rm":1,"rt":1,"cnt":22},{"n":"Danna Machando","d":"Administración","mes":"Abril","anio":"2026","mm":3.0,"mt":48.0,"tt":51.0,"rm":2,"rt":14,"cnt":23},{"n":"Nubia Guete","d":"Administración","mes":"Abril","anio":"2026","mm":1.0,"mt":5.0,"tt":6.0,"rm":1,"rt":2,"cnt":15},{"n":"Brayan Pamplona","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":23},{"n":"Jesus Osuna","d":"Taller","mes":"Abril","anio":"2026","mm":14.0,"mt":21.0,"tt":35.0,"rm":2,"rt":1,"cnt":23},{"n":"Heran Escobar","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":10.0,"tt":10.0,"rm":0,"rt":1,"cnt":23},{"n":"Luis Rivero","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":22},{"n":"Luis Orlando Cortez","d":"Transformadores","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":3},{"n":"Dayron Antonio Velez","d":"Transformadores","mes":"Abril","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":4},{"n":"Alexander Rueda","d":"Taller","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"JERSON Jimenez","d":"Transformadores","mes":"Abril","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Oswaldo Sierra","d":"Taller","mes":"Mayo","anio":"2026","mm":17.0,"mt":0.0,"tt":17.0,"rm":1,"rt":0,"cnt":19},{"n":"Moises nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Jeyson Alberto Sierra Pimienta nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Julian Andres Londoño","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Abner Fabian nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Luis Eduardo Rueda","d":"Taller","mes":"Mayo","anio":"2026","mm":58.0,"mt":0.0,"tt":58.0,"rm":2,"rt":0,"cnt":19},{"n":"Francisco Javier Gomez","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Robis José nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Victor Hugo nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Luis Eduardo Romero","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Alvaro Rueda","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Jesus Emilio Brand","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Camilo Andrés Algarin","d":"Taller","mes":"Mayo","anio":"2026","mm":115.0,"mt":0.0,"tt":115.0,"rm":12,"rt":0,"cnt":20},{"n":"Yilian Marcela Perea","d":"Taller","mes":"Mayo","anio":"2026","mm":26.0,"mt":0.0,"tt":26.0,"rm":2,"rt":0,"cnt":18},{"n":"Jhon Enrique Gualdron","d":"Taller","mes":"Mayo","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":18},{"n":"Joaquin Hernando Teran","d":"Taller","mes":"Mayo","anio":"2026","mm":4.0,"mt":1.0,"tt":5.0,"rm":3,"rt":1,"cnt":18},{"n":"Diego Alejandro Florez","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Nestor J. Cisneros nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"Gabriel Alfredo Gomez","d":"Taller","mes":"Mayo","anio":"2026","mm":29.0,"mt":8.0,"tt":37.0,"rm":8,"rt":1,"cnt":19},{"n":"Dayron Antonio Velez","d":"Transformadores","mes":"Mayo","anio":"2026","mm":3.0,"mt":0.0,"tt":3.0,"rm":1,"rt":0,"cnt":7},{"n":"Jhon Jairo Rodriguez","d":"Campo","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":18},{"n":"Adrian Eduardo Sanchez","d":"Campo","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":14},{"n":"Santos Giovanni Sanchez","d":"Campo","mes":"Mayo","anio":"2026","mm":100.0,"mt":0.0,"tt":100.0,"rm":3,"rt":0,"cnt":14},{"n":"Diego Andrés De la espriella","d":"Campo","mes":"Mayo","anio":"2026","mm":96.0,"mt":0.0,"tt":96.0,"rm":2,"rt":0,"cnt":16},{"n":"Daniel Andrés Vargas","d":"Taller","mes":"Mayo","anio":"2026","mm":75.0,"mt":11.0,"tt":86.0,"rm":6,"rt":2,"cnt":19},{"n":"María Camila Barreto","d":"Campo","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Rosalia nan","d":"Administración","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":18},{"n":"Andrea Paola Acosta","d":"Administración","mes":"Mayo","anio":"2026","mm":88.0,"mt":70.0,"tt":158.0,"rm":15,"rt":11,"cnt":19},{"n":"Leidy Encizo","d":"Taller","mes":"Mayo","anio":"2026","mm":2.0,"mt":0.0,"tt":2.0,"rm":1,"rt":0,"cnt":19},{"n":"Jaime Garcia","d":"Taller","mes":"Mayo","anio":"2026","mm":88.0,"mt":0.0,"tt":88.0,"rm":1,"rt":0,"cnt":20},{"n":"Gustavo Morales","d":"Campo","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Dirceu Centeno","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Duver Petro","d":"Campo","mes":"Mayo","anio":"2026","mm":137.0,"mt":0.0,"tt":137.0,"rm":2,"rt":0,"cnt":18},{"n":"Enoc Florez","d":"Taller","mes":"Mayo","anio":"2026","mm":32.0,"mt":2.0,"tt":34.0,"rm":2,"rt":1,"cnt":20},{"n":"Jorge Contreras","d":"Taller","mes":"Mayo","anio":"2026","mm":59.0,"mt":1.0,"tt":60.0,"rm":1,"rt":1,"cnt":17},{"n":"Danna Machando","d":"Administración","mes":"Mayo","anio":"2026","mm":16.0,"mt":24.0,"tt":40.0,"rm":3,"rt":5,"cnt":19},{"n":"Nubia Guete","d":"Administración","mes":"Mayo","anio":"2026","mm":0.0,"mt":3.0,"tt":3.0,"rm":0,"rt":1,"cnt":17},{"n":"Brayan Pamplona","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Jesus Osuna","d":"Taller","mes":"Mayo","anio":"2026","mm":88.0,"mt":2.0,"tt":90.0,"rm":1,"rt":1,"cnt":19},{"n":"Heran Escobar","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Luis Rivero","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":19},{"n":"Osman nan","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":15},{"n":"Alexander Rueda","d":"Taller","mes":"Mayo","anio":"2026","mm":3.0,"mt":0.0,"tt":3.0,"rm":1,"rt":0,"cnt":7},{"n":"Claudia Patricia Rodriguez","d":"Administración","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":18},{"n":"WALTER VEGA","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":17},{"n":"JERSON Jimenez","d":"Transformadores","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":4},{"n":"Luis Orlando Cortez","d":"Transformadores","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":5},{"n":"Leidy Tatiana Galeth","d":"Administración","mes":"Mayo","anio":"2026","mm":0.0,"mt":56.0,"tt":56.0,"rm":0,"rt":1,"cnt":7},{"n":"Oswaldo Sierra","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Moises nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Osman nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":5},{"n":"Jeyson Alberto Sierra Pimienta nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":5},{"n":"Julian Andres Londoño","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Abner Fabian nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Luis Eduardo Rueda","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Francisco Javier Gomez","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":15.0,"tt":15.0,"rm":0,"rt":1,"cnt":6},{"n":"Robis José nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Victor Hugo nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Luis Eduardo Romero","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Juan David Hernandaez","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Juan David Hernandaez","d":"Taller","mes":"Mayo","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Alvaro Rueda","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Jesus Emilio Brand","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":4},{"n":"Camilo Andrés Algarin","d":"Taller","mes":"Junio","anio":"2026","mm":64.0,"mt":5.0,"tt":69.0,"rm":5,"rt":2,"cnt":6},{"n":"Yilian Marcela Perea","d":"Taller","mes":"Junio","anio":"2026","mm":3.0,"mt":0.0,"tt":3.0,"rm":1,"rt":0,"cnt":5},{"n":"Jhon Enrique Gualdron","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Joaquin Hernando Teran","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":5},{"n":"Diego Alejandro Florez","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Nestor J. Cisneros nan","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":5},{"n":"Luis Orlando Cortez","d":"Transformadores","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Gabriel Alfredo Gomez","d":"Taller","mes":"Junio","anio":"2026","mm":4.0,"mt":0.0,"tt":4.0,"rm":1,"rt":0,"cnt":6},{"n":"Jhonatan David Lascarro","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Juan David Quintero","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Miguel Angel Ayala","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Dayron Antonio Velez","d":"Transformadores","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":3},{"n":"Jhon Jairo Rodriguez","d":"Campo","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Alexander Rueda","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"Adrian Eduardo Sanchez","d":"Campo","mes":"Junio","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":6},{"n":"Diego Andrés De la espriella","d":"Campo","mes":"Junio","anio":"2026","mm":27.0,"mt":0.0,"tt":27.0,"rm":2,"rt":0,"cnt":6},{"n":"Daniel Andrés Vargas","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":1},{"n":"María Camila Barreto","d":"Campo","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Rosalia nan","d":"Administración","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Andrea Paola Acosta","d":"Administración","mes":"Junio","anio":"2026","mm":51.0,"mt":6.0,"tt":57.0,"rm":2,"rt":2,"cnt":6},{"n":"Claudia Patricia Rodriguez","d":"Administración","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Leidy Encizo","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Jaime Garcia","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Gustavo Morales","d":"Campo","mes":"Junio","anio":"2026","mm":78.0,"mt":5.0,"tt":83.0,"rm":1,"rt":1,"cnt":6},{"n":"Dirceu Centeno","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":4},{"n":"WALTER VEGA","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Duver Petro","d":"Campo","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":2},{"n":"Leidy Tatiana Galeth","d":"Administración","mes":"Junio","anio":"2026","mm":5.0,"mt":0.0,"tt":5.0,"rm":1,"rt":0,"cnt":6},{"n":"Enoc Florez","d":"Taller","mes":"Junio","anio":"2026","mm":63.0,"mt":2.0,"tt":65.0,"rm":2,"rt":1,"cnt":6},{"n":"Jorge Contreras","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Danna Machando","d":"Administración","mes":"Junio","anio":"2026","mm":6.0,"mt":0.0,"tt":6.0,"rm":1,"rt":0,"cnt":6},{"n":"Nubia Guete","d":"Administración","mes":"Junio","anio":"2026","mm":0.0,"mt":2.0,"tt":2.0,"rm":0,"rt":1,"cnt":6},{"n":"Brayan Pamplona","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Jesus Osuna","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Heran Escobar","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Luis Rivero","d":"Taller","mes":"Junio","anio":"2026","mm":0.0,"mt":0.0,"tt":0.0,"rm":0,"rt":0,"cnt":6},{"n":"Rey Reyes","d":"Administración","mes":"Junio","anio":"2026","mm":28.0,"mt":28.0,"tt":56.0,"rm":3,"rt":5,"cnt":6},{"n":"Rey Reyes","d":"Administración","mes":"Mayo","anio":"2026","mm":1.0,"mt":0.0,"tt":1.0,"rm":1,"rt":0,"cnt":1}];
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.462.0/dist/umd/lucide.min.js"></script>
 
-const DEPT_COLORS={'Taller':'#1a3a6b','Campo':'#5cb85c','Administración':'#ef9f27','Transformadores':'#888'};
-const MESES_ORD=['Enero','Febrero','Marzo','Abril','Mayo','Junio'];
-const WEEK_DATA={Lunes:982,Martes:1101,'Miércoles':1056,Jueves:1247,Viernes:1314,Sábado:891,Domingo:205};
-
-let charts={donut:null,half:null,trend:null,week:null};
-
-document.getElementById('fechaHoy').textContent='09/06/2026 08:30 a.m.';
-
-const allNames=[...new Set(RAW.map(r=>r.n))].sort();
-const sel=document.getElementById('fPers');
-allNames.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);});
-
-function clearFilters(){
-  document.getElementById('fAnio').value='';
-  document.getElementById('fMes').value='';
-  document.getElementById('fDept').value='';
-  document.getElementById('fPers').value='';
-  render();
-}
-
-function getFiltered(){
-  const mes=document.getElementById('fMes').value;
-  const dept=document.getElementById('fDept').value;
-  const pers=document.getElementById('fPers').value;
-  return RAW.filter(r=>(!mes||r.mes===mes)&&(!dept||r.d===dept)&&(!pers||r.n===pers));
-}
-
-function aggByPerson(data){
-  const g={};
-  data.forEach(r=>{
-    if(!g[r.n])g[r.n]={n:r.n,d:r.d,mm:0,mt:0,tt:0,rm:0,rt:0,cnt:0};
-    g[r.n].mm+=r.mm;g[r.n].mt+=r.mt;g[r.n].tt+=r.tt;
-    g[r.n].rm+=r.rm;g[r.n].rt+=r.rt;g[r.n].cnt+=r.cnt;
-  });
-  return Object.values(g);
-}
-
-function fmt(n){return Math.round(n).toLocaleString('es-CO');}
-
-function render(){
-  const filtered=getFiltered();
-  const people=aggByPerson(filtered);
-  people.sort((a,b)=>b.tt-a.tt);
-  const totTT=people.reduce((s,p)=>s+p.tt,0);
-  const totMM=people.reduce((s,p)=>s+p.mm,0);
-  const totMT=people.reduce((s,p)=>s+p.mt,0);
-  const persWT=people.filter(p=>p.tt>0).length;
-  const prom=people.length?Math.round(totTT/people.length):0;
-  const maxP=people[0]||{n:'—',tt:0};
-
-  document.getElementById('mTot').textContent=fmt(totTT);
-  document.getElementById('mPers').textContent=persWT;
-  document.getElementById('mPersPct').textContent='de '+people.length+' empleados';
-  document.getElementById('mProm').textContent=fmt(prom);
-  document.getElementById('mMaxVal').textContent=fmt(maxP.tt);
-  document.getElementById('mMaxNom').textContent=maxP.n;
-  document.getElementById('rTotReg').textContent=fmt(filtered.reduce((s,r)=>s+r.cnt,0));
-  document.getElementById('rTotPers').textContent=people.length;
-  const mesesSet=new Set(filtered.map(r=>r.mes).filter(Boolean));
-  document.getElementById('rMeses').textContent=mesesSet.size||'—';
-
-  const mmPct=totTT?Math.round(totMM/totTT*100):0;
-  const mtPct=totTT?Math.round(totMT/totTT*100):0;
-  document.getElementById('mmVal').textContent=fmt(totMM);
-  document.getElementById('mmPct').textContent=mmPct+'%';
-  document.getElementById('mtVal').textContent=fmt(totMT);
-  document.getElementById('mtPct').textContent=mtPct+'%';
-  document.getElementById('halfNote').textContent='Los retardos en la mañana representan el '+mmPct+'% del total';
-
-  renderBars(people.slice(0,10));
-  renderDonut(filtered);
-  renderHalf(totMM,totMT);
-  renderTrend(filtered);
-  renderWeek();
-  renderTable(people);
-}
-
-function renderBars(top){
-  const max=Math.max(...top.map(p=>p.tt),1);
-  document.getElementById('barChart').innerHTML=top.map(p=>{
-    const pct=Math.round(p.tt/max*100);
-    const col=pct>70?'#e24b4a':pct>40?'#ef9f27':'#1a3a6b';
-    const nm=p.n.length>20?p.n.slice(0,19)+'…':p.n;
-    return `<div class="brow"><span class="bname" title="${p.n}">${nm}</span><div class="btrack"><div class="bfill" style="width:${pct}%;background:${col}"></div></div><span class="bval">${fmt(p.tt)}</span></div>`;
-  }).join('');
-}
-
-function renderDonut(filtered){
-  const dAgg={};
-  filtered.forEach(r=>{
-    if(!dAgg[r.d])dAgg[r.d]=0;
-    dAgg[r.d]+=r.tt;
-  });
-  const total=Object.values(dAgg).reduce((s,v)=>s+v,0);
-  const depts=Object.entries(dAgg).sort((a,b)=>b[1]-a[1]);
-  const labels=depts.map(d=>d[0]);
-  const vals=depts.map(d=>d[1]);
-  const colors=labels.map(l=>DEPT_COLORS[l]||'#aaa');
-
-  if(charts.donut)charts.donut.destroy();
-  charts.donut=new Chart(document.getElementById('donutChart'),{
-    type:'doughnut',
-    data:{labels,datasets:[{data:vals,backgroundColor:colors,borderWidth:2,borderColor:'#fff'}]},
-    options:{responsive:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.raw)+' min';}}}},cutout:'62%'}
-  });
-  document.getElementById('donutLegend').innerHTML=depts.map(([d,v])=>{
-    const pct=total?Math.round(v/total*100):0;
-    return `<tr><td><span class="dot" style="background:${DEPT_COLORS[d]||'#aaa'}"></span>${d}</td><td>${fmt(v)}</td><td>${pct}%</td></tr>`;
-  }).join('')+`<tr class="tot-row"><td>Total</td><td>${fmt(total)}</td><td>100%</td></tr>`;
-}
-
-function renderHalf(mm,mt){
-  if(charts.half)charts.half.destroy();
-  charts.half=new Chart(document.getElementById('halfChart'),{
-    type:'doughnut',
-    data:{labels:['Mañana','Tarde'],datasets:[{data:[mm,mt],backgroundColor:['#1a3a6b','#5cb85c'],borderWidth:2,borderColor:'#fff'}]},
-    options:{responsive:false,plugins:{legend:{display:false}},cutout:'58%'}
-  });
-}
-
-function renderTrend(filtered){
-  const mByMonth={};
-  MESES_ORD.forEach(m=>mByMonth[m]=0);
-  filtered.forEach(r=>{if(r.mes)mByMonth[r.mes]=(mByMonth[r.mes]||0)+r.tt;});
-  const activeMeses=document.getElementById('fMes').value?[document.getElementById('fMes').value]:MESES_ORD;
-  const vals=activeMeses.map(m=>mByMonth[m]||0);
-
-  if(charts.trend)charts.trend.destroy();
-  charts.trend=new Chart(document.getElementById('trendChart'),{
-    type:'line',
-    data:{labels:activeMeses,datasets:[{label:'Minutos',data:vals,borderColor:'#1a3a6b',backgroundColor:'rgba(26,58,107,0.08)',tension:.3,fill:true,pointBackgroundColor:'#1a3a6b',pointRadius:4,borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+' min'}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10},callback:v=>fmt(v)},grid:{color:'rgba(0,0,0,0.05)'}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
-  });
-}
-
-function renderWeek(){
-  const dias=Object.keys(WEEK_DATA);
-  const vals=Object.values(WEEK_DATA);
-  if(charts.week)charts.week.destroy();
-  charts.week=new Chart(document.getElementById('weekChart'),{
-    type:'bar',
-    data:{labels:dias,datasets:[{label:'Minutos',data:vals,backgroundColor:vals.map((v,i)=>i===4?'#e24b4a':'#5cb85c'),borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+' min'}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10},callback:v=>fmt(v)},grid:{color:'rgba(0,0,0,0.05)'}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
-  });
-}
-
-function renderTable(people){
-  const tbody=document.getElementById('detTbody');
-  const top=people.filter(p=>p.tt>0);
-  let html=top.map(p=>`<tr>
-    <td style="font-weight:600">${p.n}</td>
-    <td><span style="background:${DEPT_COLORS[p.d]||'#888'}22;color:${DEPT_COLORS[p.d]||'#555'};border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600">${p.d}</span></td>
-    <td style="text-align:right">${fmt(p.mm)}</td>
-    <td style="text-align:right">${fmt(p.mt)}</td>
-    <td style="text-align:right;font-weight:700;color:#e24b4a">${fmt(p.tt)}</td>
-    <td style="text-align:right">${p.rm+p.rt}</td>
-  </tr>`).join('');
-  if(top.length){
-    const tMm=top.reduce((s,p)=>s+p.mm,0),tMt=top.reduce((s,p)=>s+p.mt,0),tTt=top.reduce((s,p)=>s+p.tt,0),tR=top.reduce((s,p)=>s+p.rm+p.rt,0);
-    html+=`<tr class="tot"><td>Total</td><td></td><td style="text-align:right">${fmt(tMm)}</td><td style="text-align:right">${fmt(tMt)}</td><td style="text-align:right">${fmt(tTt)}</td><td style="text-align:right">${tR}</td></tr>`;
-  }
-  tbody.innerHTML=html;
-}
-
-['fMes','fDept','fPers','fAnio'].forEach(id=>document.getElementById(id).addEventListener('change',render));
-render();
-</script>
+<!-- ===================== APP ===================== -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
